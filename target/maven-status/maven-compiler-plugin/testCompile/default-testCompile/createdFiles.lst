@@ -1,0 +1,9 @@
+gamesys\util\AbstractControllerIT.class
+gamesys\config\SpringConfigIT.class
+gamesys\controller\UserRegistrationControllerIT.class
+gamesys\factory\UserFactory.class
+gamesys\util\AbstractSpringTest.class
+gamesys\util\ITTestUtil.class
+gamesys\config\CommonConfigTest.class
+gamesys\controller\UserRegistrationControllerTest.class
+gamesys\util\BaseControllerTest.class

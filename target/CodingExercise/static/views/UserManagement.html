@@ -1,0 +1,132 @@
+<!doctype html>
+<html ng-app="myApp"  ng-controller="UserController as ctrl">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Gamesys User Registration</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+    <script src="/static/js/controller/UserController.js"></script>
+    <script src="/static/js/service/UserService.js"></script>
+    <script src="/static/js/service/messageService.js"></script>
+
+  </head>
+  <body class="ng-cloak">
+  <section class="col-xs-12 noPadding navbar-fixed-top text-center message-alert">
+      <div class="f12 alert alert-{{message.cssClass}} alert-dismissible" role="alert" ng-show="showMessage">
+          <button ng-click="hideMessage(message)" type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+          <strong>{{message.messageContent}} </strong>
+      </div>
+  </section>
+  <div class="alert alert-danger" role="alert" ng-show="userError">
+      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+      <span class="sr-only">Error:</span>
+      {{userError.messageContent}}
+  </div>
+
+  <div class="generic-container">
+        <div class="panel panel-default">
+            <div class="panel-heading"><span class="lead">User Registration Form </span></div>
+            <div class="formcontainer">
+                <form ng-submit="ctrl.submit()" name="userForm" class="form-horizontal">
+
+
+                    <input type="hidden" ng-model="ctrl.user.id" />
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label class="col-md-2 control-lable" for="uname">Name</label>
+                            <div class="col-md-7">
+                                <input type="text" ng-model="ctrl.user.username" name="uname" id="uname" class="username form-control input-sm"
+                                       placeholder="Enter your name"  ng-pattern="/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/" required />
+                                <div class="has-error" ng-show="userForm.$dirty">
+                                    <span ng-show="userForm.uname.$error.pattern">Must be Alphanumeric, no spaces</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label class="col-md-2 control-lable" for="password">Password</label>
+                            <div class="col-md-7">
+                                <input type="password" ng-model="ctrl.user.password" name="password" id="password" class="form-control input-sm"
+                                       placeholder="Enter your Password" ng-pattern="/^(?=.*\d)(?=.*[A-Z]).{4,}$/" />
+                                <div class="has-error" ng-show="userForm.$dirty">
+                                    <span ng-show="userForm.password.$error.pattern">At least 4 characters, at least one Uppercase, at least one number</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label class="col-md-2 control-lable" for="dob">Date of Birth</label>
+                            <div class="col-md-7">
+                                <input type="date" ng-model="ctrl.user.dob" name="dob" id="dob" class="form-control input-sm" placeholder="Enter your Date of Birth" required/>
+                                <div class="has-error" ng-show="userForm.$dirty">
+                                    <span ng-show="userForm.dob.$error.required">Required!</span>
+                                    <span ng-show="userForm.dob.$error.date">Not a valid date!</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label class="col-md-2 control-lable" for="ssn">Social Security Number</label>
+                            <div class="col-md-7">
+                                <input type="text" ng-model="ctrl.user.ssn" name="ssn" id="ssn" class="form-control input-sm" placeholder="Enter your SSN, xxx-xx-xxxx"
+                                       ng-pattern="/^\d{3}-?\d{2}-?\d{4}$|^XXX-XX-XXXX$/" ng-required="true"/>
+                                <div class="has-error" ng-show="userForm.$dirty">
+                                    <span ng-show="userForm.ssn.$error.pattern">Pattern must be xxx-xx-xxx!</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-actions floatRight">
+                            <input type="submit"  value="Register" class="btn btn-primary btn-sm" ng-disabled="userForm.$invalid">
+                            <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="userForm.$pristine">Reset Form</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><span class="lead">List of Registered Users</span></div>
+            <div class="tablecontainer">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="col-md-2">ID.</th>
+                        <th class="col-md-2">User Name</th>
+                        <th class="col-md-2">Password</th>
+                        <th class="col-md-2">Date of Birth</th>
+                        <th class="col-md-2">Social Security Number</th>
+                        <th class="col-md-2"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="u in ctrl.users">
+                        <td class="col-md-2"><span ng-bind="u.id"></span></td>
+                        <td class="col-md-2"><span ng-bind="u.username"></span></td>
+                        <td class="col-md-2"><span ng-bind="u.password"></span></td>
+                        <td class="col-md-2"><span ng-bind="u.dob"></span></td>
+                        <td class="col-md-2"><span ng-bind="u.ssn"></span></td>
+                        <td class="col-md-2">
+                            <button type="button" ng-click="ctrl.remove(u.id)" class="btn btn-danger">De-Register</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    </body>
+
+</html>
