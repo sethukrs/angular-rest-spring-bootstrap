@@ -28,6 +28,7 @@ myApp.controller('UserController', ['$scope', 'UserService', 'messageService',
         }
     });
 
+    /*Thi is to check the collaboration in git */
     function fetchAllUsers(){
         UserService.fetchAllUsers()
             .then(
